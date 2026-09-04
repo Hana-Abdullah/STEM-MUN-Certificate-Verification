@@ -25,6 +25,7 @@ type Credential = {
 
 const ISSUED_DATE = 'August 23, 2026';
 const HOLDING_DATE = 'August 23, 2026';
+const CONFERENCE_NAME = 'STEM MUN International Online Conference 2026';
 
 const CREDENTIALS: Credential[] = [
   {
@@ -351,7 +352,19 @@ const CREDENTIALS: Credential[] = [
     code: 'STEM-310446',
     role: 'Delegate',
   },
-].map((credential) => ({ ...credential, date: HOLDING_DATE, issued: ISSUED_DATE }));
+  {
+    id: 'marina-harby-wto-attendance',
+    recipient: 'Marina Harby',
+    certificateName: 'Certificate of Attendance',
+    committee: 'World Trade Organization (WTO)',
+    conference: CONFERENCE_NAME,
+    date: HOLDING_DATE,
+    issued: ISSUED_DATE,
+    email: 'Not provided',
+    code: 'STEM-310447',
+    role: 'Conference Delegate',
+  },
+].map((credential) => ({ ...credential, conference: CONFERENCE_NAME, date: HOLDING_DATE, issued: ISSUED_DATE }));
 
 const getCredentialById = (id?: string) => CREDENTIALS.find((record) => record.id === id);
 const getCredentialByCode = (code?: string) => CREDENTIALS.find((record) => record.code.toLowerCase() === (code ?? '').toLowerCase());
@@ -448,7 +461,7 @@ function CertificatePage({ id }: { id?: string }) {
 function VerificationPage({ code }: { code?: string }) {
   const [, setLocation] = useLocation(); const credential = getCredentialByCode(code);
   return <Shell><main className="mx-auto max-w-4xl px-5 py-12 lg:px-10 lg:py-20"><Link href={credential ? `/certificate/${credential.id}` : '/'} className="mb-12 flex items-center gap-2 text-sm font-semibold text-[#580d00] hover:text-[#a36c22]" data-testid="link-back-from-verification"><ArrowLeft size={16} /> {credential ? 'Back to certificate' : 'Back to lookup'}</Link>
-    {credential ? <div className="animate-rise border border-[#d1af6e]/70 bg-[#fffdf8] p-6 shadow-[8px_8px_0_rgba(209,175,110,.25)] sm:p-12"><div className="flex flex-col items-center text-center"><div className="flex h-20 w-20 items-center justify-center rounded-full bg-[#e1f1e9] text-[#238b6c]"><Check size={38} strokeWidth={2.5} /></div><div className="mt-7 inline-flex items-center gap-2 rounded-full border border-[#238b6c]/25 bg-[#e1f1e9]/60 px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-[.15em] text-[#167458]"><ShieldCheck size={14} /> Credential verified</div><h1 className="mt-7 font-serif text-5xl font-semibold leading-none text-[#580d00] sm:text-6xl">{credential.certificateName}</h1><p className="mt-4 text-sm text-[#580d00]/55">STEM Model United Nations Conferences</p></div><div className="mx-auto mt-10 max-w-2xl border-t border-[#580d00]/10">{[['Recipient name', credential.recipient], ['Registered email', credential.email], ['Name on certificate', credential.recipient], ['Conference', credential.conference], ['Holding date', credential.date]].map(([label, detail]) => <div className="flex flex-col gap-2 border-b border-[#580d00]/10 py-5 sm:flex-row sm:items-center sm:justify-between" key={label}><span className="font-mono text-[10px] uppercase tracking-[.13em] text-[#580d00]/50">{label}</span><strong className="text-sm text-[#580d00] sm:text-right">{detail}</strong></div>)}</div><div className="mx-auto mt-8 flex max-w-2xl flex-col justify-between gap-3 text-xs sm:flex-row"><span className="font-mono text-[#580d00]/50">Verification code: <strong className="text-[#580d00]" data-testid="text-verification-code">{credential.code}</strong></span><span className="text-[#580d00]/45">Public record · STEM MUN</span></div></div> : <div className="animate-rise py-20 text-center"><div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#eee6d7] text-[#580d00]"><Search size={27} /></div><h1 className="mt-7 font-serif text-5xl font-semibold text-[#580d00]">Record not found.</h1><p className="mx-auto mt-4 max-w-sm text-sm leading-6 text-[#580d00]/60">This verification code is not listed in the public credential desk.</p><button onClick={() => setLocation('/')} className="mt-8 border-b-2 border-[#580d00] pb-2 text-sm font-bold text-[#580d00]" data-testid="button-search-another-record">Search another record</button></div>}
+    {credential ? <div className="animate-rise border border-[#d1af6e]/70 bg-[#fffdf8] p-6 shadow-[8px_8px_0_rgba(209,175,110,.25)] sm:p-12"><div className="flex flex-col items-center text-center"><div className="flex h-20 w-20 items-center justify-center rounded-full bg-[#e1f1e9] text-[#238b6c]"><Check size={38} strokeWidth={2.5} /></div><div className="mt-7 inline-flex items-center gap-2 rounded-full border border-[#238b6c]/25 bg-[#e1f1e9]/60 px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-[.15em] text-[#167458]"><ShieldCheck size={14} /> Credential verified</div><h1 className="mt-7 font-serif text-5xl font-semibold leading-none text-[#580d00] sm:text-6xl">{credential.certificateName}</h1><p className="mt-4 text-sm text-[#580d00]/55">{credential.conference}</p></div><div className="mx-auto mt-10 max-w-2xl border-t border-[#580d00]/10">{[['Recipient name', credential.recipient], ['Name on certificate', credential.recipient], ['Conference', credential.conference], ['Holding date', credential.date]].map(([label, detail]) => <div className="flex flex-col gap-2 border-b border-[#580d00]/10 py-5 sm:flex-row sm:items-center sm:justify-between" key={label}><span className="font-mono text-[10px] uppercase tracking-[.13em] text-[#580d00]/50">{label}</span><strong className="text-sm text-[#580d00] sm:text-right">{detail}</strong></div>)}</div><div className="mx-auto mt-8 flex max-w-2xl flex-col justify-between gap-3 text-xs sm:flex-row"><span className="font-mono text-[#580d00]/50">Verification code: <strong className="text-[#580d00]" data-testid="text-verification-code">{credential.code}</strong></span><span className="text-[#580d00]/45">Public record · STEM MUN</span></div></div> : <div className="animate-rise py-20 text-center"><div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#eee6d7] text-[#580d00]"><Search size={27} /></div><h1 className="mt-7 font-serif text-5xl font-semibold text-[#580d00]">Record not found.</h1><p className="mx-auto mt-4 max-w-sm text-sm leading-6 text-[#580d00]/60">This verification code is not listed in the public credential desk.</p><button onClick={() => setLocation('/')} className="mt-8 border-b-2 border-[#580d00] pb-2 text-sm font-bold text-[#580d00]" data-testid="button-search-another-record">Search another record</button></div>}
   </main></Shell>;
 }
 
