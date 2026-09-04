@@ -411,12 +411,12 @@ function QrLike({ code, onClick }: { code: string; onClick: () => void }) {
     void QRCode.toCanvas(canvasRef.current, verificationUrl, {
       width: 119,
       margin: 1,
-      color: { dark: '#d1af6e', light: '#ffffff' },
+      color: { dark: '#d1af6e', light: '#580d00' },
       errorCorrectionLevel: 'H',
     });
   }, [verificationUrl]);
 
-  return <button onClick={onClick} className="group relative overflow-hidden border border-[#580d00]/25 bg-white p-[7px] text-left transition-transform hover:scale-[1.03]" aria-label="Open verification record" data-testid="button-open-qr-verification"><canvas ref={canvasRef} className="block h-[119px] w-[119px]" aria-label={`QR code for ${verificationUrl}`} /><span className="absolute inset-x-[7px] bottom-[7px] bg-[#580d00]/90 py-1 text-center font-mono text-[7px] uppercase tracking-widest text-[#f8f4eb] opacity-0 transition-opacity group-hover:opacity-100">Verify</span></button>;
+  return <button onClick={onClick} className="group relative overflow-hidden border border-[#580d00] bg-[#580d00] p-[7px] text-left transition-transform hover:scale-[1.03]" aria-label="Open verification record" data-testid="button-open-qr-verification"><canvas ref={canvasRef} className="block h-[119px] w-[119px]" aria-label={`QR code for ${verificationUrl}`} /><span className="absolute inset-x-[7px] bottom-[7px] bg-[#580d00]/90 py-1 text-center font-mono text-[7px] uppercase tracking-widest text-[#f8f4eb] opacity-0 transition-opacity group-hover:opacity-100">Verify</span></button>;
 }
 
 function CertificateCard({ credential, onVerify }: { credential: Credential; onVerify: () => void }) {
