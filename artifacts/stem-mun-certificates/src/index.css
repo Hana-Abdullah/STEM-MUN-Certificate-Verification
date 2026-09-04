@@ -1,0 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-card-border: hsl(var(--card-border));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-popover-border: hsl(var(--popover-border));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-sidebar: hsl(var(--sidebar));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+  --font-sans: var(--app-font-sans);
+  --font-serif: var(--app-font-serif);
+  --font-mono: var(--app-font-mono);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --background: 37 29% 96%;
+  --foreground: 14 42% 14%;
+  --border: 36 22% 85%;
+  --input: 36 22% 82%;
+  --ring: 38 54% 48%;
+  --card: 40 33% 99%;
+  --card-foreground: 14 42% 14%;
+  --card-border: 36 22% 86%;
+  --popover: 40 33% 99%;
+  --popover-foreground: 14 42% 14%;
+  --popover-border: 36 22% 86%;
+  --primary: 14 80% 17%;
+  --primary-foreground: 39 42% 96%;
+  --secondary: 38 54% 48%;
+  --secondary-foreground: 14 42% 14%;
+  --muted: 36 20% 91%;
+  --muted-foreground: 20 12% 42%;
+  --accent: 38 54% 48%;
+  --accent-foreground: 14 42% 14%;
+  --destructive: 2 67% 42%;
+  --destructive-foreground: 38 40% 97%;
+  --sidebar: 14 80% 17%;
+  --sidebar-foreground: 39 42% 96%;
+  --sidebar-border: 14 65% 23%;
+  --sidebar-primary: 38 54% 48%;
+  --sidebar-primary-foreground: 14 42% 14%;
+  --sidebar-accent: 14 65% 23%;
+  --sidebar-accent-foreground: 39 42% 96%;
+  --sidebar-ring: 38 54% 48%;
+  --app-font-sans: 'DM Sans', sans-serif;
+  --app-font-serif: 'Cormorant Garamond', Georgia, serif;
+  --app-font-mono: 'Space Mono', monospace;
+  --radius: 0.85rem;
+  --spacing: 0.25rem;
+  --tracking-normal: 0em;
+}
+
+.dark {
+  --background: 14 27% 10%;
+  --foreground: 39 42% 96%;
+  --border: 14 25% 25%;
+  --input: 14 25% 25%;
+  --ring: 38 54% 48%;
+  --card: 14 25% 14%;
+  --card-foreground: 39 42% 96%;
+  --card-border: 14 25% 25%;
+  --popover: 14 25% 14%;
+  --popover-foreground: 39 42% 96%;
+  --popover-border: 14 25% 25%;
+  --primary: 38 54% 48%;
+  --primary-foreground: 14 42% 14%;
+  --secondary: 14 65% 23%;
+  --secondary-foreground: 39 42% 96%;
+  --muted: 14 25% 20%;
+  --muted-foreground: 36 20% 70%;
+  --accent: 38 54% 48%;
+  --accent-foreground: 14 42% 14%;
+  --destructive: 2 67% 50%;
+  --destructive-foreground: 39 42% 96%;
+  --sidebar: 14 27% 8%;
+  --sidebar-foreground: 39 42% 96%;
+  --sidebar-border: 14 25% 18%;
+  --sidebar-primary: 38 54% 48%;
+  --sidebar-primary-foreground: 14 42% 14%;
+  --sidebar-accent: 14 25% 18%;
+  --sidebar-accent-foreground: 39 42% 96%;
+  --sidebar-ring: 38 54% 48%;
+}
+
+@layer base {
+  * { @apply border-border; }
+  html { scroll-behavior: smooth; }
+  body { @apply font-sans antialiased bg-background text-foreground; min-width: 320px; }
+  button, a, input { -webkit-tap-highlight-color: transparent; }
+}
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes soft-pulse {
+  0%, 100% { opacity: .7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.04); }
+}
+@keyframes draw-line {
+  from { transform: scaleX(0); transform-origin: left; }
+  to { transform: scaleX(1); transform-origin: left; }
+}
+.animate-rise { animation: rise-in .7s cubic-bezier(.2,.8,.2,1) both; }
+.animate-rise-delay-1 { animation-delay: .1s; }
+.animate-rise-delay-2 { animation-delay: .2s; }
+.animate-rise-delay-3 { animation-delay: .3s; }
+.animate-soft-pulse { animation: soft-pulse 2.8s ease-in-out infinite; }
+.gold-rule { position: relative; }
+.gold-rule::after { content: ''; display: block; width: 56px; height: 2px; background: #d1af6e; margin-top: 16px; animation: draw-line .7s .3s both; }
+.text-balance { text-wrap: balance; }
+.paper-grain::before { content: ''; position: fixed; pointer-events: none; inset: 0; z-index: 50; opacity: .035; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E"); }
+.qr-grid { background-color: #fffdf7; background-image: linear-gradient(90deg, rgba(88,13,0,.09) 1px, transparent 1px), linear-gradient(rgba(88,13,0,.09) 1px, transparent 1px); background-size: 7px 7px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; } }

@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "STEM MUN Certificate Verification"
+description = "A public certificate lookup and verification website for STEM Model United Nations delegates, starting with Hana Abdullah in UNSC and ready for additional records."
+version = "1.0.0"
+id = "artifacts/stem-mun-certificates"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23291
+
+[services.development]
+run = "pnpm --filter @workspace/stem-mun-certificates run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/stem-mun-certificates", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/stem-mun-certificates/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23291"
+BASE_PATH = "/"
