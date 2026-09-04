@@ -24,6 +24,7 @@ type Credential = {
 };
 
 const ISSUED_DATE = 'August 23, 2026';
+const HOLDING_DATE = 'August 23, 2026';
 
 const CREDENTIALS: Credential[] = [
   {
@@ -350,7 +351,7 @@ const CREDENTIALS: Credential[] = [
     code: 'STEM-310446',
     role: 'Delegate',
   },
-].map((credential) => ({ ...credential, issued: ISSUED_DATE }));
+].map((credential) => ({ ...credential, date: HOLDING_DATE, issued: ISSUED_DATE }));
 
 const getCredentialById = (id?: string) => CREDENTIALS.find((record) => record.id === id);
 const getCredentialByCode = (code?: string) => CREDENTIALS.find((record) => record.code.toLowerCase() === (code ?? '').toLowerCase());
