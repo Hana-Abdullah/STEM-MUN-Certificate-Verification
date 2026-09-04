@@ -23,6 +23,8 @@ type Credential = {
   role: string;
 };
 
+const ISSUED_DATE = 'August 23, 2026';
+
 const CREDENTIALS: Credential[] = [
   {
     id: 'hana-abdullah',
@@ -348,7 +350,7 @@ const CREDENTIALS: Credential[] = [
     code: 'STEM-310446',
     role: 'Delegate',
   },
-];
+].map((credential) => ({ ...credential, issued: ISSUED_DATE }));
 
 const getCredentialById = (id?: string) => CREDENTIALS.find((record) => record.id === id);
 const getCredentialByCode = (code?: string) => CREDENTIALS.find((record) => record.code.toLowerCase() === (code ?? '').toLowerCase());
