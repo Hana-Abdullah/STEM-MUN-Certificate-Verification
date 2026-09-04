@@ -4,7 +4,7 @@ import { ErrorBoundary } from '@/components/error-boundary';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import NotFound from '@/pages/not-found';
-import { Award, ArrowLeft, ArrowRight, Check, ClipboardCheck, Copy, Download, FileCheck2, Hash, Landmark, Menu, QrCode, Search, ShieldCheck, X } from 'lucide-react';
+import { Award, ArrowLeft, ArrowRight, Check, Copy, Download, FileCheck2, Hash, Landmark, QrCode, Search, ShieldCheck } from 'lucide-react';
 import { Link, Route, Switch, useLocation, Router as WouterRouter } from 'wouter';
 import QRCode from 'qrcode';
 
@@ -49,31 +49,16 @@ function BrandMark({ light = false }: { light?: boolean }) {
 }
 
 function Header({ onLookup }: { onLookup?: () => void }) {
-  const [menuOpen, setMenuOpen] = useState(false);
-  return <header className="relative z-20 border-b border-[#580d00]/10 bg-[#f8f4eb]/90 backdrop-blur-md">
-    <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-10">
-      <Link href="/" className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d1af6e]" data-testid="link-home-brand"><BrandMark /></Link>
-      <nav className="hidden items-center gap-9 md:flex" aria-label="Primary navigation">
-        <a href="#how-it-works" className="text-sm font-medium text-[#580d00]/65 transition-colors hover:text-[#580d00]" data-testid="link-how-it-works">How it works</a>
-        <a href="#about" className="text-sm font-medium text-[#580d00]/65 transition-colors hover:text-[#580d00]" data-testid="link-about">About credentials</a>
-        <button onClick={onLookup} className="flex items-center gap-2 text-sm font-semibold text-[#580d00] transition-colors hover:text-[#a36c22]" data-testid="button-header-lookup">Find a certificate <ArrowRight size={15} /></button>
-      </nav>
-      <button className="rounded-md p-2 text-[#580d00] md:hidden" onClick={() => setMenuOpen((open) => !open)} aria-label="Open navigation" data-testid="button-mobile-menu">{menuOpen ? <X size={21} /> : <Menu size={21} />}</button>
+  return <header className="relative z-20 border-b border-[#d1af6e]/35 bg-[#580d00] text-[#f8f4eb]">
+    <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 lg:px-10">
+      <Link href="/" className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d1af6e]" data-testid="link-home-brand"><BrandMark light /></Link>
+      <button onClick={onLookup} className="flex items-center gap-2 border border-[#d1af6e]/70 px-4 py-3 text-xs font-semibold text-[#f8f4eb] transition-colors hover:bg-[#6f1a0e]" data-testid="button-header-lookup">Find a certificate <ArrowRight size={15} /></button>
     </div>
-    {menuOpen && <nav className="border-t border-[#580d00]/10 px-5 py-4 md:hidden" aria-label="Mobile navigation">
-      <a href="#how-it-works" onClick={() => setMenuOpen(false)} className="block py-2 text-sm font-medium text-[#580d00]/75" data-testid="link-mobile-how-it-works">How it works</a>
-      <a href="#about" onClick={() => setMenuOpen(false)} className="block py-2 text-sm font-medium text-[#580d00]/75" data-testid="link-mobile-about">About credentials</a>
-      <button onClick={() => { setMenuOpen(false); onLookup?.(); }} className="flex items-center gap-2 py-2 text-sm font-semibold text-[#580d00]" data-testid="button-mobile-lookup">Find a certificate <ArrowRight size={15} /></button>
-    </nav>}
   </header>;
 }
 
-function Footer() {
-  return <footer className="border-t border-[#d1af6e]/20 bg-[#580d00] text-[#f7f0df]"><div className="mx-auto flex max-w-7xl flex-col gap-8 px-5 py-10 md:flex-row md:items-end md:justify-between lg:px-10"><div><BrandMark light /><p className="mt-5 max-w-xs text-sm leading-6 text-[#f7f0df]/60">The official public desk for STEM Model United Nations credentials.</p></div><div className="text-left md:text-right"><p className="font-mono text-[10px] uppercase tracking-[.22em] text-[#d1af6e]">Credential desk / 2026</p><p className="mt-2 text-xs text-[#f7f0df]/50">Built for clarity. Held to account.</p></div></div></footer>;
-}
-
 function Shell({ children, onLookup }: { children: ReactNode; onLookup?: () => void }) {
-  return <div className="paper-grain min-h-[100dvh] bg-[#f8f4eb]"><Header onLookup={onLookup} />{children}<Footer /></div>;
+  return <div className="paper-grain min-h-[100dvh] bg-[#f8f4eb]"><Header onLookup={onLookup} />{children}</div>;
 }
 
 function SearchPanel({ onSearch }: { onSearch: (value: string) => void }) {
@@ -89,17 +74,9 @@ function SearchPanel({ onSearch }: { onSearch: (value: string) => void }) {
 function Home() {
   const [, setLocation] = useLocation();
   const scrollToLookup = () => document.getElementById('lookup')?.scrollIntoView({ behavior: 'smooth' });
-  const [searched, setSearched] = useState(false);
-  const handleSearch = (value: string) => { setSearched(true); setLocation(value ? `/certificate/${value.toLowerCase().replace(/\s+/g, '-')}` : '/'); };
+  const handleSearch = (value: string) => { setLocation(value ? `/certificate/${value.toLowerCase().replace(/\s+/g, '-')}` : '/'); };
   return <Shell onLookup={scrollToLookup}><main>
-    <section className="relative overflow-hidden border-b border-[#580d00]/10 bg-[#f8f4eb]"><div className="pointer-events-none absolute -right-40 -top-32 h-[520px] w-[520px] rounded-full border border-[#d1af6e]/25 sm:-right-20 sm:-top-44" /><div className="pointer-events-none absolute right-[-210px] top-[-5px] h-[440px] w-[440px] rounded-full border border-[#d1af6e]/20" />
-      <div className="mx-auto grid max-w-7xl items-center gap-14 px-5 pb-20 pt-16 md:grid-cols-[1.05fr_.95fr] md:gap-10 md:pb-28 md:pt-24 lg:px-10"><div className="animate-rise"><div className="mb-8 flex items-center gap-3 font-mono text-[10px] font-bold uppercase tracking-[.22em] text-[#580d00]/55"><span className="h-px w-8 bg-[#d1af6e]" /> Official record / 01</div><h1 className="gold-rule max-w-2xl font-serif text-[clamp(3.3rem,7vw,6.65rem)] font-semibold leading-[.85] tracking-[-.045em] text-[#580d00]">Your work<br /><span className="text-[#d1af6e]">deserves a</span><br />record.</h1><p className="mt-10 max-w-md text-base leading-7 text-[#580d00]/65 sm:text-lg">Find, download, and verify your official STEM Model United Nations certificate in one clear place.</p><button onClick={scrollToLookup} className="mt-8 flex items-center gap-3 border-b-2 border-[#580d00] pb-2 text-sm font-bold text-[#580d00] transition-colors hover:border-[#d1af6e] hover:text-[#a36c22]" data-testid="button-hero-find">Look up a certificate <ArrowRight size={17} /></button></div>
-        <div className="relative min-h-[280px] animate-rise animate-rise-delay-2 md:min-h-[410px]"><div className="absolute right-2 top-6 h-56 w-56 rounded-full bg-[#580d00] sm:right-12 sm:h-72 sm:w-72" /><div className="absolute right-12 top-14 h-44 w-44 rounded-full border border-[#d1af6e]/70 sm:right-24 sm:h-60 sm:w-60" /><div className="absolute bottom-2 left-2 z-10 w-[min(100%,370px)] rotate-[-4deg] border border-[#d1af6e]/65 bg-[#fffdf8] p-6 shadow-[12px_16px_0_#d1af6e] sm:left-12 sm:p-8"><div className="flex items-start justify-between"><div className="h-8 w-8 border border-[#d1af6e] p-1.5 text-[#580d00]"><Award size={17} /></div><span className="font-mono text-[8px] uppercase tracking-[.18em] text-[#580d00]/45">No. 852278</span></div><div className="mt-12 text-center"><div className="font-mono text-[8px] uppercase tracking-[.25em] text-[#580d00]/55">STEM Model United Nations</div><div className="mt-3 font-serif text-3xl font-bold text-[#580d00]">Certificate</div><div className="mx-auto mt-4 h-px w-24 bg-[#d1af6e]" /><div className="mt-4 font-serif text-2xl font-semibold text-[#580d00]">Hana Abdullah</div><div className="mt-3 text-[10px] text-[#580d00]/55">Conference Delegate · UNSC</div></div><div className="mt-14 flex items-end justify-between"><div className="font-mono text-[8px] text-[#580d00]/55">AUG 24 / 2026</div><div className="h-7 w-7 rounded-full border border-[#d1af6e] text-center font-serif leading-6 text-[#d1af6e]">S</div></div></div><div className="absolute bottom-[-10px] right-0 z-20 flex h-20 w-20 rotate-[9deg] items-center justify-center border-4 border-[#f8f4eb] bg-[#d1af6e] text-center text-[9px] font-bold uppercase leading-3 tracking-wider text-[#580d00] shadow-lg sm:right-5"><span className="rounded-full border border-[#580d00]/30 p-2">Official<br />record</span></div></div>
-      </div>
-    </section>
-    <section id="lookup" className="scroll-mt-10 bg-[#580d00] px-5 py-16 text-[#f8f4eb] md:py-20"><div className="mx-auto max-w-7xl lg:px-5"><div className="mb-10 flex flex-col justify-between gap-4 md:flex-row md:items-end"><div><p className="font-mono text-[10px] uppercase tracking-[.2em] text-[#d1af6e]">Credential search</p><h2 className="mt-3 font-serif text-4xl font-semibold leading-none md:text-5xl">Start with a name.</h2></div><p className="max-w-xs text-sm leading-6 text-[#f8f4eb]/60">Your certificate record is held exactly as issued by the conference desk.</p></div><div className="rounded-sm border border-[#d1af6e]/35 bg-[#67190d] p-5 sm:p-8"><SearchPanel onSearch={handleSearch} /></div>{searched && <div className="mt-4 text-sm text-[#f8f4eb]/70">No match yet? Check the spelling and try again.</div>}</div></section>
-    <section id="how-it-works" className="mx-auto max-w-7xl scroll-mt-8 px-5 py-20 lg:px-10 lg:py-28"><div className="grid gap-14 md:grid-cols-[.8fr_1.2fr]"><div><p className="font-mono text-[10px] uppercase tracking-[.2em] text-[#580d00]/55">A dependable handoff</p><h2 className="mt-4 max-w-sm font-serif text-5xl font-semibold leading-[.9] text-[#580d00]">Clear at every step.</h2></div><div className="grid gap-0 border-t border-[#580d00]/15 sm:grid-cols-3">{[['01', 'Find', 'Search the name printed on your certificate.'], ['02', 'Confirm', 'Review the official record and its verification code.'], ['03', 'Share', 'Download a clean copy or send the verification link.']].map(([number, title, body]) => <div className="border-b border-[#580d00]/15 py-7 sm:border-b-0 sm:border-r sm:px-7 sm:first:pl-0 sm:last:border-r-0" key={number}><div className="font-mono text-xs text-[#d1af6e]">{number}</div><h3 className="mt-8 font-serif text-3xl font-semibold text-[#580d00]">{title}</h3><p className="mt-3 text-sm leading-6 text-[#580d00]/60">{body}</p></div>)}</div></div></section>
-    <section id="about" className="border-y border-[#580d00]/10 bg-[#eee6d7] px-5 py-14 lg:px-10"><div className="mx-auto flex max-w-7xl flex-col gap-6 md:flex-row md:items-center md:justify-between"><div className="flex gap-4"><div className="mt-1 text-[#580d00]"><ClipboardCheck size={24} strokeWidth={1.5} /></div><div><p className="font-mono text-[10px] uppercase tracking-[.2em] text-[#580d00]/55">About this desk</p><h2 className="mt-2 font-serif text-3xl font-semibold text-[#580d00]">One record. No guesswork.</h2></div></div><p className="max-w-lg text-sm leading-6 text-[#580d00]/65">A public-facing credential record gives schools, programs, and collaborators a straightforward way to confirm a delegate's participation.</p></div></section>
+    <section id="lookup" className="min-h-[calc(100dvh-83px)] scroll-mt-10 bg-[#580d00] px-5 py-16 text-[#f8f4eb] md:py-24"><div className="mx-auto flex max-w-5xl flex-col justify-center"><div className="mb-10 max-w-xl"><p className="font-mono text-[10px] uppercase tracking-[.2em] text-[#d1af6e]">Official credential desk</p><h1 className="mt-4 font-serif text-5xl font-semibold leading-[.9] md:text-7xl">Your Certificates<br />&amp; Awards</h1><p className="mt-6 max-w-md text-sm leading-6 text-[#f8f4eb]/65">Find your STEM Model United Nations record, review the committee details, and download your certificate.</p></div><div className="rounded-sm border border-[#d1af6e]/35 bg-[#67190d] p-5 sm:p-8"><SearchPanel onSearch={handleSearch} /></div><div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-[#d1af6e]/25 pt-5 font-mono text-[9px] uppercase tracking-[.18em] text-[#f8f4eb]/50"><span className="flex items-center gap-2"><ShieldCheck size={14} className="text-[#d1af6e]" /> Public verification</span><span>STEM MUN / 2026</span></div></div></section>
   </main></Shell>;
 }
 
