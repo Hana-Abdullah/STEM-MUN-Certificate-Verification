@@ -4,7 +4,7 @@ import { ErrorBoundary } from '@/components/error-boundary';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import NotFound from '@/pages/not-found';
-import { Award, ArrowLeft, ArrowRight, Check, Copy, Download, FileCheck2, Hash, Landmark, QrCode, Search, ShieldCheck } from 'lucide-react';
+import { Award, ArrowLeft, ArrowRight, Check, Copy, Download, FileCheck2, Hash, QrCode, Search, ShieldCheck } from 'lucide-react';
 import { Link, Route, Switch, useLocation, Router as WouterRouter } from 'wouter';
 import QRCode from 'qrcode';
 
@@ -26,6 +26,27 @@ type Credential = {
 const ISSUED_DATE = 'August 23, 2026';
 const HOLDING_DATE = 'August 23, 2026';
 const CONFERENCE_NAME = 'STEM MUN International Online Conference 2026';
+const LOGO_SRC = `${import.meta.env.BASE_URL}stem-mun-logo.png`;
+const SUPPLIED_CERTIFICATE_FILES: Record<string, string> = {
+  'aseel-ahmad': 'certificates/aseel-ahmad.pdf',
+  'bernard-kalenga': 'certificates/bernard-kalenga.pdf',
+  'haneen-ahmed-best-delegate': 'certificates/haneen-ahmed-best-delegate.pdf',
+  'humairaa-khan': 'certificates/humairaa-khan.pdf',
+  'jana-elkholy': 'certificates/jana-elkholy.pdf',
+  'joudy-ahmed-outstanding-delegate': 'certificates/joudy-ahmed-outstanding-delegate.pdf',
+  'khadija-nawaf': 'certificates/khadija-nawaf.pdf',
+  'mazen-mohamed': 'certificates/mazen-mohamed.pdf',
+  'mohamed-raoof': 'certificates/mohamed-raoof.pdf',
+  'mostafa-ashraf': 'certificates/mostafa-ashraf.pdf',
+  'ntando-hara': 'certificates/ntando-hara.pdf',
+  'nur-saidatul-fatimah': 'certificates/nur-saidatul-fatimah.pdf',
+  'roba-ahmed-outstanding-delegate': 'certificates/roba-ahmed-outstanding-delegate.pdf',
+  'roba-ahmed-best-position-paper': 'certificates/roba-ahmed-best-position-paper.pdf',
+  'salma-beshir': 'certificates/salma-beshir.pdf',
+  'shaden-roza': 'certificates/shaden-roza.pdf',
+  'stephani-amisi': 'certificates/stephani-amisi.pdf',
+  'yashfa-ahsan': 'certificates/yashfa-ahsan.pdf',
+};
 
 const CREDENTIALS: Credential[] = [
   {
@@ -271,14 +292,14 @@ const CREDENTIALS: Credential[] = [
   {
     id: 'mostafa-ashraf',
     recipient: 'Mostafa Ashraf',
-    certificateName: 'Best Position Paper',
+    certificateName: 'Honourable Mention',
     committee: 'World Trade Organization (WTO)',
     conference: 'STEM Model United Nations Conference',
     date: 'August 24, 2026',
     issued: 'August 24, 2026',
     email: 'Not provided',
     code: 'STEM-310440',
-    role: 'Best Position Paper',
+    role: 'Honourable Mention',
   },
   {
     id: 'reham-ahmed',
@@ -372,8 +393,8 @@ const getCredentialsByRecipient = (slug?: string) => CREDENTIALS.filter((record)
 
 function BrandMark({ light = false }: { light?: boolean }) {
   return <div className="flex items-center gap-3" data-testid="brand-mark">
-    <div className={`relative flex h-11 w-11 items-center justify-center rounded-full border ${light ? 'border-[#d1af6e]/70 bg-[#d1af6e]/10' : 'border-[#580d00]/20 bg-[#580d00]'}`}>
-      <Landmark size={20} strokeWidth={1.5} className={light ? 'text-[#d1af6e]' : 'text-[#f7f0df]'} /><span className="absolute -bottom-1 h-2 w-2 rotate-45 bg-[#d1af6e]" />
+    <div className={`relative flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border ${light ? 'border-[#d1af6e]/70 bg-[#580d00]' : 'border-[#580d00]/20 bg-[#580d00]'}`}>
+      <img src={LOGO_SRC} alt="" className="h-full w-full object-contain p-1" /><span className="absolute -bottom-1 h-2 w-2 rotate-45 bg-[#d1af6e]" />
     </div>
     <div className="leading-none"><div className={`font-serif text-xl font-bold tracking-tight ${light ? 'text-[#f7f0df]' : 'text-[#580d00]'}`}>STEM MUN</div><div className={`mt-1 font-mono text-[8px] uppercase tracking-[.25em] ${light ? 'text-[#d1af6e]' : 'text-[#580d00]/60'}`}>Credential Desk</div></div>
   </div>;
@@ -434,6 +455,16 @@ function QrLike({ code, onClick }: { code: string; onClick: () => void }) {
 
 function CertificateCard({ credential, onVerify }: { credential: Credential; onVerify: () => void }) {
   const downloadCertificate = () => {
+    const suppliedFile = SUPPLIED_CERTIFICATE_FILES[credential.id];
+    if (suppliedFile) {
+      const link = document.createElement('a');
+      link.href = `${import.meta.env.BASE_URL}${suppliedFile}`;
+      link.download = `${credential.id}-certificate.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      return;
+    }
     const html = `<!doctype html><html><head><meta charset="utf-8"><title>${credential.certificateName} — ${credential.recipient}</title><style>body{margin:0;background:#f8f4eb;color:#580d00;font-family:Georgia,serif}.page{box-sizing:border-box;margin:48px auto;padding:70px;max-width:900px;min-height:620px;border:12px double #d1af6e;background:#fffdf8;text-align:center}.eyebrow{font:12px monospace;letter-spacing:4px}.name{font-size:58px;margin:32px 0 16px}.rule{width:120px;border-top:2px solid #d1af6e;margin:auto}.details{margin:52px auto 0;max-width:570px;border-top:1px solid #d9ccb5;text-align:left;font:15px sans-serif}.row{display:flex;justify-content:space-between;padding:16px 0;border-bottom:1px solid #e7dfd1}.label{font:11px monospace;letter-spacing:1px;color:#81756c}.footer{margin-top:50px;font:11px monospace;letter-spacing:2px}</style></head><body><div class="page"><div class="eyebrow">STEM MODEL UNITED NATIONS · OFFICIAL RECORD</div><div class="name">${credential.certificateName}</div><div class="rule"></div><p>This is to certify that</p><div style="font-size:31px">${credential.recipient}</div><p>participated as a ${credential.role} in the<br>${credential.committee} committee.</p><div class="details"><div class="row"><span class="label">CONFERENCE</span><b>${credential.conference}</b></div><div class="row"><span class="label">DATE</span><b>${credential.date}</b></div><div class="row"><span class="label">VERIFICATION CODE</span><b>${credential.code}</b></div></div><div class="footer">STEM MUN CREDENTIAL DESK · ${credential.issued}</div></div></body></html>`;
     const url = URL.createObjectURL(new Blob([html], { type: 'text/html;charset=utf-8' })); const link = document.createElement('a'); link.href = url; link.download = `${credential.id}-certificate.html`; document.body.appendChild(link); link.click(); link.remove(); URL.revokeObjectURL(url);
   };
