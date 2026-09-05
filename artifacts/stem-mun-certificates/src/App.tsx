@@ -1,12 +1,11 @@
-import { type FormEvent, type ReactNode, useEffect, useRef, useState } from 'react';
+import { type FormEvent, type ReactNode, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import NotFound from '@/pages/not-found';
-import { Award, ArrowLeft, ArrowRight, Check, Copy, Download, FileCheck2, Hash, QrCode, Search, ShieldCheck } from 'lucide-react';
+import { Award, ArrowLeft, ArrowRight, Check, Copy, Download, FileCheck2, Hash, Search, ShieldCheck } from 'lucide-react';
 import { Link, Route, Switch, useLocation, Router as WouterRouter } from 'wouter';
-import QRCode from 'qrcode';
 
 const queryClient = new QueryClient();
 
@@ -30,22 +29,31 @@ const LOGO_SRC = `${import.meta.env.BASE_URL}stem-mun-logo.png`;
 const SUPPLIED_CERTIFICATE_FILES: Record<string, string> = {
   'aseel-ahmad': 'certificates/aseel-ahmad.pdf',
   'bernard-kalenga': 'certificates/bernard-kalenga.pdf',
+  'haneen-ahmed-attendance': 'certificates/haneen-ahmed-attendance.pdf',
   'haneen-ahmed-best-delegate': 'certificates/haneen-ahmed-best-delegate.pdf',
   'humairaa-khan': 'certificates/humairaa-khan.pdf',
   'jana-elkholy': 'certificates/jana-elkholy.pdf',
+  'joudy-ahmed-attendance': 'certificates/joudy-ahmed-attendance.pdf',
   'joudy-ahmed-outstanding-delegate': 'certificates/joudy-ahmed-outstanding-delegate.pdf',
   'khadija-nawaf': 'certificates/khadija-nawaf.pdf',
+  'maha-ahmed': 'certificates/maha-ahmed.pdf',
+  'malak-mohamed': 'certificates/malak-mohamed.pdf',
   'mazen-mohamed': 'certificates/mazen-mohamed.pdf',
   'mohamed-raoof': 'certificates/mohamed-raoof.pdf',
   'mostafa-ashraf': 'certificates/mostafa-ashraf.pdf',
   'ntando-hara': 'certificates/ntando-hara.pdf',
   'nur-saidatul-fatimah': 'certificates/nur-saidatul-fatimah.pdf',
+  'reham-ahmed': 'certificates/reham-ahmed.pdf',
+  'renad-mahmoud': 'certificates/renad-mahmoud.pdf',
+  'roba-ahmed-attendance': 'certificates/roba-ahmed-attendance.pdf',
   'roba-ahmed-outstanding-delegate': 'certificates/roba-ahmed-outstanding-delegate.pdf',
   'roba-ahmed-best-position-paper': 'certificates/roba-ahmed-best-position-paper.pdf',
   'salma-beshir': 'certificates/salma-beshir.pdf',
   'shaden-roza': 'certificates/shaden-roza.pdf',
   'stephani-amisi': 'certificates/stephani-amisi.pdf',
   'yashfa-ahsan': 'certificates/yashfa-ahsan.pdf',
+  'yousr-ahmed': 'certificates/yousr-ahmed.pdf',
+  'marina-harby-wto-attendance': 'certificates/marina-harby-wto-attendance.pdf',
 };
 
 const CREDENTIALS: Credential[] = [
@@ -436,23 +444,6 @@ function NotFoundRecord({ searchedName, onBack }: { searchedName?: string; onBac
   return <Shell onLookup={onBack}><main className="mx-auto flex min-h-[calc(100dvh-180px)] max-w-3xl flex-col items-center justify-center px-5 py-20 text-center"><div className="flex h-20 w-20 items-center justify-center rounded-full border border-[#d1af6e]/60 bg-[#eee6d7] text-[#580d00]"><Search size={28} strokeWidth={1.5} /></div><p className="mt-8 font-mono text-[10px] uppercase tracking-[.22em] text-[#580d00]/55">No matching record</p><h1 className="mt-4 font-serif text-5xl font-semibold leading-none text-[#580d00] md:text-6xl">We could not find<br />that certificate.</h1><p className="mt-6 max-w-md text-sm leading-6 text-[#580d00]/60">{searchedName ? <>There is no credential filed under <strong className="text-[#580d00]">{searchedName}</strong>.</> : 'No certificate was found for that request.'} Try the recipient name as it appears on the issued document.</p><button onClick={onBack} className="mt-9 flex items-center gap-3 border-b-2 border-[#580d00] pb-2 text-sm font-bold text-[#580d00]" data-testid="button-return-to-lookup"><ArrowLeft size={17} /> Return to lookup</button></main></Shell>;
 }
 
-function QrLike({ code, onClick }: { code: string; onClick: () => void }) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const verificationUrl = `${window.location.origin}${import.meta.env.BASE_URL}verify/${code}`;
-
-  useEffect(() => {
-    if (!canvasRef.current) return;
-    void QRCode.toCanvas(canvasRef.current, verificationUrl, {
-      width: 119,
-      margin: 1,
-      color: { dark: '#d1af6e', light: '#580d00' },
-      errorCorrectionLevel: 'H',
-    });
-  }, [verificationUrl]);
-
-  return <button onClick={onClick} className="group relative overflow-hidden border border-[#580d00] bg-[#580d00] p-[7px] text-left transition-transform hover:scale-[1.03]" aria-label="Open verification record" data-testid="button-open-qr-verification"><canvas ref={canvasRef} className="block h-[119px] w-[119px]" aria-label={`QR code for ${verificationUrl}`} /><span className="absolute inset-x-[7px] bottom-[7px] bg-[#580d00]/90 py-1 text-center font-mono text-[7px] uppercase tracking-widest text-[#f8f4eb] opacity-0 transition-opacity group-hover:opacity-100">Verify</span></button>;
-}
-
 function CertificateCard({ credential, onVerify }: { credential: Credential; onVerify: () => void }) {
   const downloadCertificate = () => {
     const suppliedFile = SUPPLIED_CERTIFICATE_FILES[credential.id];
@@ -471,7 +462,7 @@ function CertificateCard({ credential, onVerify }: { credential: Credential; onV
   const copyCode = async () => { await navigator.clipboard?.writeText(credential.code); };
   return <div className="mx-auto max-w-7xl px-5 py-10 lg:px-10 lg:py-16"><div className="mb-12 flex flex-wrap items-center justify-between gap-4"><Link href="/" className="flex items-center gap-2 text-sm font-semibold text-[#580d00] transition-colors hover:text-[#a36c22]" data-testid="link-back-home"><ArrowLeft size={16} /> Back to lookup</Link><div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[.18em] text-[#580d00]/50"><span className="h-2 w-2 rounded-full bg-[#238b6c]" /> Record available</div></div>
     <div className="grid gap-10 lg:grid-cols-[1fr_340px] lg:items-start"><article className="animate-rise relative overflow-hidden border border-[#d1af6e]/70 bg-[#fffdf8] p-6 shadow-[8px_8px_0_rgba(209,175,110,.25)] sm:p-12 md:p-16"><div className="pointer-events-none absolute left-4 top-4 h-7 w-7 border-l border-t border-[#d1af6e] sm:left-8 sm:top-8 sm:h-12 sm:w-12" /><div className="pointer-events-none absolute bottom-4 right-4 h-7 w-7 border-b border-r border-[#d1af6e] sm:bottom-8 sm:right-8 sm:h-12 sm:w-12" /><div className="text-center"><div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-[#d1af6e] text-[#580d00]"><Award size={25} strokeWidth={1.25} /></div><div className="mt-6 font-mono text-[9px] font-bold uppercase tracking-[.28em] text-[#580d00]/55">Credential verified</div><h1 className="mt-4 font-serif text-[clamp(2.5rem,5vw,4.5rem)] font-semibold leading-[.9] tracking-[-.03em] text-[#580d00]">{credential.certificateName}</h1><p className="mt-4 text-sm text-[#580d00]/55">{credential.conference}</p><div className="mx-auto mt-8 h-px w-20 bg-[#d1af6e]" /></div><div className="mx-auto mt-9 max-w-xl border-t border-[#580d00]/10">{[['Recipient name', credential.recipient], ['Committee', credential.committee], ['Role', credential.role], ['Holding date', credential.date]].map(([label, detail]) => <div className="flex flex-col gap-2 border-b border-[#580d00]/10 py-4 sm:flex-row sm:items-center sm:justify-between" key={label}><span className="font-mono text-[9px] uppercase tracking-[.15em] text-[#580d00]/50">{label}</span><strong className="text-sm text-[#580d00] sm:text-right">{detail}</strong></div>)}</div><div className="mt-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><span className="font-mono text-[9px] uppercase tracking-[.15em] text-[#580d00]/50">Verification code</span><button onClick={copyCode} className="mt-2 flex items-center gap-2 font-mono text-sm font-bold text-[#580d00] hover:text-[#a36c22]" data-testid="button-copy-verification-code"><Hash size={14} className="text-[#d1af6e]" /> {credential.code} <Copy size={13} className="ml-1 opacity-50" /></button></div><span className="font-mono text-[9px] text-[#580d00]/40">Issued {credential.issued}</span></div></article>
-       <aside className="animate-rise animate-rise-delay-1 space-y-4"><div className="border border-[#580d00]/30 bg-white p-6"><div className="flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-[.18em] text-[#580d00]"><QrCode size={16} className="text-[#d1af6e]" /> Scan to verify</div><p className="mt-3 text-sm leading-6 text-[#580d00]/60">Anyone with this record can confirm its authenticity using the verification link.</p><div className="mt-6 flex justify-center"><QrLike code={credential.code} onClick={onVerify} /></div><button onClick={onVerify} className="mt-5 flex w-full items-center justify-center gap-2 border border-[#580d00]/30 py-3 text-xs font-bold text-[#580d00] transition-colors hover:border-[#580d00] hover:bg-[#580d00]/5" data-testid="button-verify-record"><ShieldCheck size={15} /> Open verification view</button></div><button onClick={downloadCertificate} className="flex w-full items-center justify-center gap-3 bg-[#580d00] px-5 py-4 text-sm font-bold text-[#f8f4eb] transition-colors hover:bg-[#761d0e]" data-testid="button-download-certificate"><Download size={17} /> Download certificate</button><div className="flex items-start gap-3 border-t border-[#580d00]/10 pt-5 text-xs leading-5 text-[#580d00]/55"><FileCheck2 size={16} className="mt-0.5 shrink-0 text-[#d1af6e]" /> This record is publicly verifiable and can be shared with schools or program offices.</div></aside>
+       <aside className="animate-rise animate-rise-delay-1 space-y-4"><div className="border border-[#580d00]/30 bg-white p-6"><div className="flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-[.18em] text-[#580d00]"><ShieldCheck size={16} className="text-[#d1af6e]" /> Verify this record</div><p className="mt-3 text-sm leading-6 text-[#580d00]/60">Anyone with this record can confirm its authenticity using the verification link.</p><button onClick={onVerify} className="mt-5 flex w-full items-center justify-center gap-2 border border-[#580d00]/30 py-3 text-xs font-bold text-[#580d00] transition-colors hover:border-[#580d00] hover:bg-[#580d00]/5" data-testid="button-verify-record"><ShieldCheck size={15} /> Open verification view</button></div><button onClick={downloadCertificate} className="flex w-full items-center justify-center gap-3 bg-[#580d00] px-5 py-4 text-sm font-bold text-[#f8f4eb] transition-colors hover:bg-[#761d0e]" data-testid="button-download-certificate"><Download size={17} /> Download certificate</button><div className="flex items-start gap-3 border-t border-[#580d00]/10 pt-5 text-xs leading-5 text-[#580d00]/55"><FileCheck2 size={16} className="mt-0.5 shrink-0 text-[#d1af6e]" /> This record is publicly verifiable and can be shared with schools or program offices.</div></aside>
     </div></div>;
 }
 
